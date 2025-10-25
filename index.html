@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://www.lncc.br/~borges/php/testar.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  
+  <title>&#128424;&#65039; Gerador de ZPL By Luis</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    h2 {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    p {
+      margin: 10px 0;
+      color: #ddd;
+    }
+
+    .generator-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .generator-box input {
+      width: 90px;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 700px;
+      height: 180px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 15px;
+      font-family: monospace;
+      background: #f9f9f9;
+      color: #333;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      resize: vertical;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #00a8ff;
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #0090e0;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    pre {
+      background: #222;
+      color: #0f0;
+      padding: 15px;
+      border-radius: 8px;
+      max-width: 700px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      border: 1px solid #555;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #ccc;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <h2>&#128424;&#65039; Gerador de ZPL em Massa - By Luis</h2>
+
+  <div class="generator-box">
+    <h3>&#9881;&#65039; Gerar Totes Automáticos</h3>
+    <p>Escolha o intervalo e clique em <b>Gerar Totes</b>:</p>
+    <label>De: <input type="number" id="inicioTote" value="1"></label>
+    <label>Até: <input type="number" id="fimTote" value="5000"></label>
+    <button onclick="gerarTotes()">&#128230; Gerar Totes</button>
+  </div>
+
+  <p>Cole ou gere abaixo a lista de impressão (um por linha):</p>
+  <textarea id="inputList" placeholder="Exemplo:
+tote1
+tote2
+tote3
+tote4"></textarea>
+
+  <div class="buttons">
+    <button onclick="gerarZPL()">&#129534; Gerar ZPL</button>
+    <button onclick="copiarZPL()">&#128203; Copiar</button>
+    <button onclick="baixarZPL()">&#128190; Baixar</button>
+  </div>
+
+  <h3>&#128230; Resultado:</h3>
+  <pre id="output"></pre>
+
+  <footer>Feito com &#10084;&#65039; por Luis — HTML + CSS + JS puro</footer>
+
+  <script>
+    function gerarTotes() {
+      const inicio = parseInt(document.getElementById("inicioTote").value);
+      const fim = parseInt(document.getElementById("fimTote").value);
+      let lista = "";
+
+      if (isNaN(inicio) || isNaN(fim) || inicio > fim) {
+        alert("&#9888;&#65039; Verifique os valores de início e fim!");
+        return;
+      }
+
+      for (let i = inicio; i <= fim; i++) {
+        lista += `tote${i}\n`;
+      }
+
+      document.getElementById("inputList").value = lista.trim();
+    }
+
+    function gerarZPL() {
+      const input = document.getElementById("inputList").value.trim().split("\n");
+      let zpl = "";
+
+      for (let i = 0; i < input.length; i += 2) {
+        const addr1 = input[i] || "";
+        const addr2 = input[i + 1] || "";
+
+        zpl += `^XA
+^CF0,40
+^FO100,20^FD${addr1}^FS
+^FO70,70^BY2,2.5,80^BCN,80,N,N,N^FD${addr1}^FS
+^FO500,20^FD${addr2}^FS
+^FO470,70^BY2,2.5,80^BCN,80,N,N,N^FD${addr2}^FS
+^PQ1
+^XZ
+`;
+      }
+
+      document.getElementById("output").textContent = zpl;
+    }
+
+    function copiarZPL() {
+      const text = document.getElementById("output").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("&#9989; ZPL copiado para a área de transferência!");
+      });
+    }
+
+    function baixarZPL() {
+      const text = document.getElementById("output").textContent;
+      const blob = new Blob([text], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "enderecos.zpl";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+
+</body></html>
