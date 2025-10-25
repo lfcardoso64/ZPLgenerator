@@ -114,14 +114,14 @@
   <h2>&#128424;&#65039; Gerador de ZPL em Massa - By Luis</h2>
 
   <div class="generator-box">
-    <h3>&#9881;&#65039; Gerar Totes Automáticos</h3>
+    <h3>&#9881;&#65039; Gerar Totes AutomÃ¡ticos</h3>
     <p>Escolha o intervalo e clique em <b>Gerar Totes</b>:</p>
     <label>De: <input type="number" id="inicioTote" value="1"></label>
-    <label>Até: <input type="number" id="fimTote" value="5000"></label>
+    <label>AtÃ©: <input type="number" id="fimTote" value="5000"></label>
     <button onclick="gerarTotes()">&#128230; Gerar Totes</button>
   </div>
 
-  <p>Cole ou gere abaixo a lista de impressão (um por linha):</p>
+  <p>Cole ou gere abaixo a lista de impressÃ£o (um por linha):</p>
   <textarea id="inputList" placeholder="Exemplo:
 tote1
 tote2
@@ -137,7 +137,7 @@ tote4"></textarea>
   <h3>&#128230; Resultado:</h3>
   <pre id="output"></pre>
 
-  <footer>Feito com &#10084;&#65039; por Luis — HTML + CSS + JS puro</footer>
+  <footer>Feito com &#10084;&#65039; por Luis â€” Cubbo Brasil</footer>
 
   <script>
     function gerarTotes() {
@@ -146,7 +146,7 @@ tote4"></textarea>
       let lista = "";
 
       if (isNaN(inicio) || isNaN(fim) || inicio > fim) {
-        alert("&#9888;&#65039; Verifique os valores de início e fim!");
+        alert("&#9888;&#65039; Verifique os valores de inÃ­cio e fim!");
         return;
       }
 
@@ -182,7 +182,7 @@ tote4"></textarea>
     function copiarZPL() {
       const text = document.getElementById("output").textContent;
       navigator.clipboard.writeText(text).then(() => {
-        alert("&#9989; ZPL copiado para a área de transferência!");
+        alert("&#9989; ZPL copiado para a Ã¡rea de transferÃªncia!");
       });
     }
 
